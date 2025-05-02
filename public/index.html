@@ -32,8 +32,9 @@
         async function loadNotes() {
         const res = await fetch(apiURL);
         const notes = await res.json();
+        
+        const list = document.getElementById('notesList');
 
-        const list = document.getElementById('noteList');
         list.innerHTML = '';
         notes.forEach(note => {
             const li = document.createElement('li');
