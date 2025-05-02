@@ -43,7 +43,7 @@ app.post('/notes', async (req, res) => {
 app.get('/notes', async (req, res) => {
     try {
         const notes = await Note.find();
-        res.json(notes.map(note => note.content)); // Send only the note content
+        res.json(notes); // send full note objects
     } catch (error) {
         console.error('❌ Error fetching notes:', error);
         res.status(500).send('❌ Failed to fetch notes');
