@@ -13,29 +13,47 @@
     <ul id="notesList"></ul>
 
     <script>
+        const apiURL = 'https://noteapp-production-2ec8.up.railway.app/notes';
+
         async function saveNote() {
-            const note = document.getElementById('noteInput').value;
-            await fetch('http://localhost:3000/notes', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ note })
-            });
-            loadNotes(); // Refresh the list
+        const note = document.getElementById('noteInput').value;
+        if (!note) return;
+        
+        await fetch(apiURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ note })
+        });
+
+        document.getElementById('noteInput').value = '';
+        loadNotes();
         }
 
         async function loadNotes() {
-            const response = await fetch('http://localhost:3000/notes');
-            const notes = await response.json();
-            const list = document.getElementById('notesList');
-            list.innerHTML = '';
-            notes.forEach(note => {
-                const li = document.createElement('li');
-                li.textContent = note;
-                list.appendChild(li);
-            });
+        const res = await fetch(apiURL);
+        const notes = await res.json();
+
+        const list = document.getElementById('noteList');
+        list.innerHTML = '';
+        notes.forEach(note => {
+            const li = document.createElement('li');
+            li.textContent = note.content;
+
+            const btn = document.createElement('button');
+            btn.textContent = '🗑️';
+            btn.onclick = () => deleteNote(note._id);
+
+            li.appendChild(btn);
+            list.appendChild(li);
+        });
         }
 
-        loadNotes(); // Load notes when page opens
+        async function deleteNote(id) {
+        await fetch(`${apiURL}/${id}`, { method: 'DELETE' });
+        loadNotes();
+        }
+
+        loadNotes();
     </script>
 </body>
 </html>
