@@ -50,6 +50,17 @@ app.get('/notes', async (req, res) => {
     }
 });
 
+// 🗑️ Delete a note by ID
+app.delete('/notes/:id', async (req, res) => {
+    try {
+        await Note.findByIdAndDelete(req.params.id);
+        res.sendStatus(204); // No content
+    } catch (error) {
+        console.error('❌ Error deleting note:', error);
+        res.status(500).send('❌ Failed to delete note');
+    }
+});
+
 // 🚀 Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
