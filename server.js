@@ -16,8 +16,10 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // 🧱 Define a Note model
 const Note = mongoose.model('Note', {
-    content: String
-});
+    title: String,
+    content: String,
+    tags: [String]
+  }); 
 
 // 🛠 Middleware
 app.use(cors()); // Allow cross-origin (optional if frontend is on same server)
