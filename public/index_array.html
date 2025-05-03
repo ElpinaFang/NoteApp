@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes App</title>
+</head>
+<body>
+    <h1>My Notes App</h1>
+
+    <input id="noteInput" type="text" placeholder="Write your note here...">
+    <button onclick="saveNote()">Save Note</button>
+
+    <h2>Saved Notes:</h2>
+    <ul id="notesList"></ul>
+
+    <script>
+        async function saveNote() {
+            const input = document.getElementById('noteInput');
+            const note = input.value.trim();
+
+            if (!note) {
+                alert("Please write something before saving!");
+                return;
+            }
+
+            await fetch('/notes', { // <--- notice, no localhost:3000 needed!
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ note })
+            });
+
+            input.value = '';
+            await loadNotes();
+        }
+
+        async function loadNotes() {
+            const response = await fetch('/notes'); // <--- same here
+            const notes = await response.json();
+
+            const list = document.getElementById('notesList');
+            list.innerHTML = '';
+
+            notes.forEach(note => {
+                const li = document.createElement('li');
+                li.textContent = note;
+                list.appendChild(li);
+            });
+        }
+
+        loadNotes();
+    </script>
+</body>
+</html>

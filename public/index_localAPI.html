@@ -13,7 +13,7 @@
     <ul id="notesList"></ul>
 
     <script>
-        const apiURL = 'https://noteapp-production-2ec8.up.railway.app/notes';
+        const apiURL = 'http://localhost:3000/notes';
 
         async function saveNote() {
             const note = document.getElementById('noteInput').value;
@@ -32,9 +32,8 @@
         async function loadNotes() {
             const res = await fetch(apiURL);
             const notes = await res.json();
-            
-            const list = document.getElementById('notesList');
 
+            const list = document.getElementById('notesList');
             list.innerHTML = '';
             notes.forEach(note => {
                 const li = document.createElement('li');
