@@ -29,15 +29,15 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serve static fronten
 // Save a new note
 app.post('/notes', async (req, res) => {
     try {
-        const noteContent = req.body.note;
-        const newNote = new Note({ content: noteContent });
-        await newNote.save();
-        res.status(201).send('✅ Note saved to database');
+      const { title, content, tags } = req.body;
+      const newNote = new Note({ title, content, tags });
+      await newNote.save();
+      res.status(201).send('✅ Note saved');
     } catch (error) {
-        console.error('❌ Error saving note:', error);
-        res.status(500).send('❌ Failed to save note');
+      console.error('❌ Error saving note:', error);
+      res.status(500).send('❌ Failed to save note');
     }
-});
+  });
 
 // Fetch all notes
 app.get('/notes', async (req, res) => {

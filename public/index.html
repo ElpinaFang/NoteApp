@@ -6,26 +6,43 @@
     <title>Notes App</title>
 </head>
 <body>
-    <h1>My Notes</h1>
-    <input id="noteInput" type="text" placeholder="Write a note...">
-    <button onclick="saveNote()">Save Note</button>
+    <h1>My Notes App</h1>
 
+    <input id="titleInput" type="text" placeholder="Title"><br>
+    <textarea id="contentInput" placeholder="Write your note here..."></textarea><br>
+    <input id="tagsInput" type="text" placeholder="Tags (comma-separated)">
+    <button onclick="saveNote()">Save Note</button>
+  
+    <h2>Saved Notes:</h2>
     <ul id="notesList"></ul>
 
     <script>
         const apiURL = 'https://noteapp-production-2ec8.up.railway.app/notes';
 
         async function saveNote() {
-            const note = document.getElementById('noteInput').value;
-            if (!note) return;
+            const title = document.getElementById('titleInput').value.trim();
+            const content = document.getElementById('contentInput').value.trim();
+            const tags = document.getElementById('tagsInput').value.trim();
+
+            if (!title || !content) {
+                alert("Title and content are required.");
+                return;
+            }
             
             await fetch(apiURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ note })
+                body: JSON.stringify({
+                    title,
+                    content,
+                    tags: tags.split(',').map(tag => tag.trim()).filter(Boolean)
+                })
             });
 
-            document.getElementById('noteInput').value = '';
+            document.getElementById('titleInput').value = '';
+            document.getElementById('contentInput').value = '';
+            document.getElementById('tagsInput').value = '';
+            
             loadNotes();
         }
 
@@ -34,11 +51,12 @@
             const notes = await res.json();
             
             const list = document.getElementById('notesList');
-
             list.innerHTML = '';
+
             notes.forEach(note => {
                 const li = document.createElement('li');
-                li.textContent = note.content;
+                li.innerHTML = `<strong>${note.title}</strong>: ${note.content} 
+                    <small>${note.tags?.join(', ') ?? ''}</small>`;
 
                 const btn = document.createElement('button');
                 btn.textContent = '🗑️';
