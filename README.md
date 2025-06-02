@@ -1,5 +1,5 @@
 # 📝 NoteApp
-A simple note-taking web app built with HTML, CSS, and JavaScript, powered by a Node.js/Express backend. You can create, view, and delete notes in real time
+A simple note-taking web app built with HTML, CSS, and JavaScript, powered by a Node.js/Express backend. You can create, view, and delete notes in real time.
 
 ## 🌐 Features
 - Add new notes with a title, content, and tags
